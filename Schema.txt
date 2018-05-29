@@ -1,0 +1,59 @@
+--->PASSENGER
+CREATE TABLE PASSENGER (
+SSN CHAR(9) NOT NULL,
+Ticket_no NUMBER(5) NOT NULL,
+Fname VARCHAR(20) NOT NULL,
+Minit CHAR,
+Lname VARCHAR(20) NOT NULL,
+Gender CHAR NOT NULL,
+Age int NOT NULL,
+Phn_num CHAR(10),
+P_train_id NUMBER(5),
+P_payment_id NUMBER(5),
+CONSTRAINT ssn_pk PRIMARY KEY(SSN),
+CONSTRAINT p_payment_id_fk FOREIGN KEY(P_payment_id) REFERENCES PAYMENT(Payment_id),
+CONSTRAINT p_train_id_fk FOREIGN KEY(P_train_id) REFERENCES TRAIN_ROUTE(Train_id),CHECK(Gender='M' or Gender='F' or Gender='O'),CHECK(Age>0));
+
+
+
+---->TRAIN_ROUTE
+CREATE TABLE TRAIN_ROUTE(
+Train_name VARCHAR(20) NOT NULL,
+Train_id NUMBER(5) NOT NULL,
+Train_type VARCHAR(20) NOT NULL,
+Source VARCHAR(20) NOT NULL,
+Destination VARCHAR(20) NOT NULL,
+Fare DECIMAL(5,2) NOT NULL,
+Arr_time TIMESTAMP NOT NULL,
+Dep_time TIMESTAMP NOT NULL,
+CONSTRAINT train_id_pk PRIMARY KEY(Train_id), CHECK(Train_id > 0) , UNIQUE(Train_name));
+
+
+--->SEAT_STATUS
+CREATE TABLE SEAT_STATUS(
+Seats_Available int NOT NULL,
+Seat_no int NOT NULL,
+Status VARCHAR(20) NOT NULL,
+Dates DATE,
+S_Train_id NUMBER(5),
+S_SSN CHAR(9),
+CONSTRAINT train_id_status_fk FOREIGN KEY(S_Train_id) REFERENCES TRAIN_ROUTE(Train_id),
+CONSTRAINT S_ssn_fk FOREIGN KEY(S_SSN) REFERENCES PASSENGER(SSN),CHECK(Seat_no>0));
+
+ 
+ --->ADMIN
+ CREATE TABLE ADMIN(
+User_id VARCHAR2(20) NOT NULL,
+Pwd VARCHAR2(20) NOT NULL,
+CONSTRAINT userid_pk PRIMARY KEY(User_id));
+
+
+--->PAYMENT
+CREATE TABLE PAYMENT(
+Payment_id NUMBER(5) NOT NULL,
+Holder_name VARCHAR(20) NOT NULL,
+Credit_num CHAR(16) NOT NULL,
+Modes CHAR,
+Payment_date Date NOT NULL,
+Status VARCHAR(15),
+CONSTRAINT payment_id_pk PRIMARY KEY(Payment_id),CHECK(Payment_id>0), CHECK(Modes='V' or Modes ='C' or Modes='M'));
